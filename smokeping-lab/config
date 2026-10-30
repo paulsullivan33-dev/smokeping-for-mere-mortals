@@ -1,0 +1,140 @@
+# SmokePing lab config — the one that actually ran in this guide's lab.
+#
+# It has the same shape as a normal install's /etc/smokeping/config.
+# The differences are all lab adaptations, and each is marked:
+#
+#  * every path points into the lab folder instead of /var, /run, /etc
+#  * the Database step is 30 seconds instead of the usual 300, so a
+#    short lab session collects several rounds (keep 300 in real use)
+#  * sendmail is /bin/true — the alert patterns below are configured
+#    and syntax-checked, but the lab sends no mail
+#  * the probe is Curl, not FPing. This lab's sandbox forbids ICMP
+#    sockets entirely, even to 127.0.0.1 and even as root — see
+#    transcripts/t03-network-reality.txt. The FPing version of this
+#    same setup is config.fping, next to this file; it passes the
+#    same checks, and its single test round is in
+#    transcripts/t05-fping-debug-round.txt.
+
+*** General ***
+
+owner    = SmokePing Lab
+contact  = lab@example.invalid
+mailhost = localhost
+sendmail = /bin/true
+imgcache = /home/hatch/workspace/smokeping-labwork/run/imgcache
+imgurl   = imgcache
+datadir  = /home/hatch/workspace/smokeping-labwork/run/data
+piddir   = /home/hatch/workspace/smokeping-labwork/run/var
+cgiurl   = http://localhost/cgi-bin/smokeping.cgi
+smokemail = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/smokemail
+tmail    = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/tmail
+
+*** Alerts ***
+
+to = alerts@example.invalid
+from = smokeping@example.invalid
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,>20%
+comment = No loss for three rounds, then more than a fifth of the checks lost
+edgetrigger = yes
+
++slowweb
+type = rtt
+# in seconds
+pattern = <0.010,<0.010,>0.100
+comment = Two fast rounds, then one round slower than a tenth of a second
+edgetrigger = yes
+
+*** Database ***
+
+step     = 30
+pings    = 5
+
+# consfn xff steps rows
+
+AVERAGE  0.5   1   2000
+AVERAGE  0.5  12   2000
+    MIN  0.5  12   2000
+    MAX  0.5  12   2000
+
+*** Presentation ***
+
+template = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/basepage.html
+charset = utf-8
+
++ charts
+
+menu = Charts
+title = The most interesting destinations
+
+++ stddev
+sorter = StdDev(entries=>4)
+title = Top Standard Deviation
+menu = Std Deviation
+format = Standard Deviation %f
+
+++ max
+sorter = Max(entries=>5)
+title = Top Max Roundtrip Time
+menu = by Max
+format = Max Roundtrip Time %f seconds
+
+++ loss
+sorter = Loss(entries=>5)
+title = Top Packet Loss
+menu = Loss
+format = Packets Lost %f
+
+++ median
+sorter = Median(entries=>5)
+title = Top Median Roundtrip Time
+menu = by Median
+format = Median Roundtrip Time %f seconds
+
++ overview
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 360 Days"   360d
+
+*** Probes ***
+
++ Curl
+
+binary = /usr/bin/curl
+
+*** Targets ***
+
+probe = Curl
+
+menu = Top
+title = Lab latency
+remark = The SmokePing lab: one local web server, watched over HTTP \
+         because this sandbox will not let anything send a ping.
+
++ Lab
+
+menu = Lab
+title = Lab targets
+
+++ LocalWeb
+
+menu = Loopback web server
+title = The lab web server on this same machine, fetched over HTTP
+host = 127.0.0.1
+urlformat = http://%host%:8080/
+alerts = bigloss,slowweb

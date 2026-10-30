@@ -1,0 +1,11 @@
+$ uname -a; cat /etc/os-release (first lines)
+Linux htch-runtime 7.0.0-39-generic #1 SMP PREEMPT_DYNAMIC Thu Sep 24 08:42:15 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+
+$ which smokeping rrdtool fping (before the lab)
+(none found — that is the starting point)
+
+$ id
+uid=0(root) gid=0(root) groups=0(root)

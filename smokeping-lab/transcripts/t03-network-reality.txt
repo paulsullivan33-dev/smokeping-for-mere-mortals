@@ -1,0 +1,24 @@
+Why the lab cannot ping, even on loopback — the sandbox network, measured
+
+$ fping -C 3 127.0.0.1
+/home/hatch/workspace/smokeping-labwork/root/usr/bin/fping: can't create socket (must run as root?)
+exit=4
+
+$ ping -c 2 127.0.0.1   (the system ping, for comparison)
+ping: socktype: SOCK_RAW
+ping: socket: Operation not permitted
+
+$ grep CapEff /proc/self/status
+CapEff:	000001fffff7cfff
+(CAP_NET_RAW is not in the effective set, and this shell is already uid 0)
+
+$ python3 socket tests
+raw ICMP socket: [Errno 1] Operation not permitted
+ICMP datagram (ping) socket: [Errno 13] Permission denied
+UDP send on loopback: [Errno 1] Operation not permitted
+TCP connection on loopback: OK
+
+Conclusion: in this sandbox, ICMP and UDP do not work at all — not even
+to 127.0.0.1, not even as root. TCP on loopback works. So the FPing
+config is validated and given one honest round (t05), and the running
+lab uses SmokePing's Curl probe against a local web server instead.

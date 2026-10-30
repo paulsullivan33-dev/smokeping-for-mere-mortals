@@ -1,0 +1,44 @@
+$ apt-get install --download-only --no-install-recommends smokeping rrdtool fping
+(lab-private apt state: package lists and cache live in this folder; nothing is installed system-wide)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  cpio libconfig-grammar-perl libdbi1t64 libdigest-hmac-perl
+  libfile-listing-perl libhtml-tree-perl libhttp-cookies-perl
+  libhttp-negotiate-perl libio-socket-ssl-perl libjs-cropper libjs-prototype
+  libjs-scriptaculous liblwp-protocol-https-perl libnet-http-perl
+  libnet-snmp-perl libnet-ssleay-perl libnsl2 librrd8t64 librrds-perl
+  libsnmp-session-perl libtry-tiny-perl libwww-perl libwww-robotrules-perl
+  perl-openssl-defaults postfix
+Suggested packages:
+  libarchive-dev libcrypt-ssleay-perl libcrypt-des-perl
+  libio-socket-inet6-perl libsub-name-perl libauthen-ntlm-perl debhelper
+  libsasl2-modules | dovecot-common mail-reader postfix-cdb postfix-doc
+  postfix-ldap postfix-lmdb postfix-mta-sts-resolver postfix-mysql
+  postfix-pcre postfix-pgsql postfix-sqlite procmail resolvconf sasl2-bin
+  | dovecot-common libauthen-radius-perl libnet-ldap-perl libnet-dns-perl
+  libnet-telnet-perl libnet-openssh-perl libio-pty-perl libpath-tiny-perl
+  libinfluxdb-lineprotocol-perl libobject-result-perl
+Recommended packages:
+  libhtml-format-perl javascript-common libio-socket-inet6-perl
+  libsocket6-perl libdata-dump-perl libhtml-form-perl libhttp-daemon-perl
+  libmailtools-perl echoping
+The following NEW packages will be installed:
+  cpio fping libconfig-grammar-perl libdbi1t64 libdigest-hmac-perl
+  libfile-listing-perl libhtml-tree-perl libhttp-cookies-perl
+  libhttp-negotiate-perl libio-socket-ssl-perl libjs-cropper libjs-prototype
+  libjs-scriptaculous liblwp-protocol-https-perl libnet-http-perl
+  libnet-snmp-perl libnet-ssleay-perl libnsl2 librrd8t64 librrds-perl
+  libsnmp-session-perl libtry-tiny-perl libwww-perl libwww-robotrules-perl
+  perl-openssl-defaults postfix rrdtool smokeping
+0 upgraded, 28 newly installed, 0 to remove and 3 not upgraded.
+Need to get 3857 kB of archives.
+After this operation, 13.0 MB of additional disk space will be used.
+Fetched 3857 kB in 22s (179 kB/s)
+Download complete and in download only mode
+W: Download is performed unsandboxed as root as file '/home/hatch/workspace/smokeping-labwork/cache/archives/partial/cpio_2.15+dfsg-1ubuntu2.1_amd64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+
+$ ls cache/archives/*.deb | wc -l
+28
+3.8M	cache/archives

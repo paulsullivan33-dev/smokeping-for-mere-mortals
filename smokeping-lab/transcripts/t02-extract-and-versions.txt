@@ -1,0 +1,28 @@
+$ dpkg -x each .deb into labwork/root (extraction only — no package is installed)
+root/usr/bin/fping
+root/usr/bin/rrdtool
+root/usr/share/man/man1/smokeping.1.gz
+root/usr/share/man/man1/smokeping_cgi.1.gz
+root/usr/share/man/man5/smokeping_config.5.gz
+root/usr/share/man/man5/smokeping_examples.5.gz
+root/usr/share/man/man7/smokeping_extend.7.gz
+root/usr/share/man/man7/smokeping_install.7.gz
+root/usr/share/man/man7/smokeping_master_slave.7.gz
+root/usr/share/man/man7/smokeping_upgrade.7.gz
+
+$ ls root/usr/share/perl5/ | grep -i smoke
+Smokeping
+Smokeping.pm
+root/usr/share/perl5/Smokeping
+root/usr/share/perl5/Smokeping.pm
+$ smokeping --version   (from the extracted tree, PERL5LIB pointed at it)
+2.008002
+
+$ rrdtool --version
+RRDtool 1.7.2  Copyright by Tobias Oetiker <tobi@oetiker.ch>
+
+$ fping -v
+/home/hatch/workspace/smokeping-labwork/root/usr/bin/fping: Version 5.1
+
+$ perl -MRRDs -e VERSION-check
+Undefined subroutine &RRDs::VERSION called at -e line 1.

@@ -1,0 +1,48 @@
+$ smokeping --debug --config=config.fping   (one round, no forking)
+### assuming you are using an fping copy reporting in milliseconds
+### Compiling alert detector pattern 'bigloss'
+### ==0%,==0%,==0%,>20%
+sub { 
+    my $d = shift;
+    my $y = $d->{loss};
+    for(1){
+        my $minlength = 4;
+        my $maxlength = 4;
+        next if scalar @$y < $minlength ;
+        next unless defined $y->[-4]
+                        and $y->[-4] =~ /^\d/
+                        and $y->[-4] == 0
+                             ;        next unless defined $y->[-3]
+                        and $y->[-3] =~ /^\d/
+                        and $y->[-3] == 0
+                             ;        next unless defined $y->[-2]
+                        and $y->[-2] =~ /^\d/
+                        and $y->[-2] == 0
+                             ;        next unless defined $y->[-1]
+                        and $y->[-1] =~ /^\d/
+                        and $y->[-1] > 20
+                             ;        return 1;
+    }
+    return 0;
+}
+
+Calling RRDs::create(/home/hatch/workspace/smokeping-labwork/run/data-fping/Local/Loopback.rrd --start 1793349092 --step 30 DS:uptime:GAUGE:60:0:U DS:loss:GAUGE:60:0:5 DS:median:GAUGE:60:0:U DS:ping1:GAUGE:60:0:U DS:ping2:GAUGE:60:0:U DS:ping3:GAUGE:60:0:U DS:ping4:GAUGE:60:0:U DS:ping5:GAUGE:60:0:U RRA:AVERAGE:0.5:1:2000 RRA:AVERAGE:0.5:12:2000 RRA:MIN:0.5:12:2000 RRA:MAX:0.5:12:2000)
+Smokeping version 2.008002 successfully launched.
+Not entering multiprocess mode with '--debug'. Use '--debug-daemon' for that.
+FPing: probing 1 targets with step 30 s and offset 19 s.
+FPing: Executing /home/hatch/workspace/smokeping-labwork/root/usr/bin/fping -C 5 -q -B1 -r1 -i10 127.0.0.1
+/home/hatch/workspace/smokeping-labwork/root/usr/bin/fping -C 5 -q -B1 -r1 -i10 127.0.0.1 returned with exit code 1024. run with debug enabled to get more information at /home/hatch/workspace/smokeping-labwork/root/usr/share/perl5/Smokeping.pm line 1811.
+Calling RRDs::update(/home/hatch/workspace/smokeping-labwork/run/data-fping/Local/Loopback.rrd --template uptime:loss:median:ping1:ping2:ping3:ping4:ping5 1793349093:U:5:U:U:U:U:U:U)
+Alert "bigloss": no match for target /home/hatch/workspace/smokeping-labwork/run/data-fping/Local/Loopback
+exit=0
+
+$ ls run/data-fping/Local/
+total 508
+drwxr-xr-x 1 root root     24 Oct 30 08:31 .
+drwxrwx--- 1 root root     10 Oct 30 08:31 ..
+-rw-r--r-- 1 root root 517072 Oct 30 08:31 Loopback.rrd
+
+$ rrdtool lastupdate run/data-fping/Local/Loopback.rrd
+ uptime loss median ping1 ping2 ping3 ping4 ping5
+
+1793349093: U 5 U U U U U U

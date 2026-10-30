@@ -1,0 +1,35 @@
+The web page and its graphs, produced by SmokePing's own CGI
+(smokeping.cgi from the package, run as a plain CGI with the lab
+config as its argument — the same program a web server would run;
+no web server was needed for the lab to exercise it)
+
+$ GET smokeping.cgi?target=Lab.LocalWeb
+Expires: Fri, 30 Oct 2026 08:39:42 GMT
+Content-Type: text/html; charset=utf-8
+<title>SmokePing Latency Page for The lab web server on this same
+machine, fetched over HTTP</title>
+
+$ GET smokeping.cgi?displaymode=n;start=now-1h;end=now;target=Lab.LocalWeb
+(the navigator page; its graph image is written to the navcache)
+
+$ ls -la run/imgcache/Lab/ run/imgcache/__navcache/
+total 104
+drwxr-xr-x 1 root root   230 Oct 30 08:37 .
+drwxrwx--- 1 root root    74 Oct 30 08:37 ..
+-rw-r--r-- 1 root root 24081 Oct 30 08:37 LocalWeb_last_10800.png
+-rw-r--r-- 1 root root 20583 Oct 30 08:37 LocalWeb_last_108000.png
+-rw-r--r-- 1 root root 26755 Oct 30 08:37 LocalWeb_last_31104000.png
+-rw-r--r-- 1 root root 23789 Oct 30 08:37 LocalWeb_last_864000.png
+total 24
+drwxr-xr-x 1 root root    74 Oct 30 08:37 .
+drwxrwx--- 1 root root    74 Oct 30 08:37 ..
+-rw-r--r-- 1 root root 24109 Oct 30 08:37 179334946568052_1793349465_now-1h.png
+
+$ python3 — check the "Last 3 Hours" graph is a real PNG
+PNG magic bytes ok: True
+size: 24081 bytes; dimensions: 697 x 310
+
+The PNG is a full latency graph — axes, grid and the measured
+series from t07 — drawn by RRDtool from the lab RRD file, via
+SmokePing's graph code. A copy is kept as graph-localweb.png
+in this lab folder.

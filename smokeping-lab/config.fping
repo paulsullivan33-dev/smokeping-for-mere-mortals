@@ -1,0 +1,98 @@
+# SmokePing lab config — the FPing version.
+#
+# This is the setup the guide teaches for a normal machine: the FPing
+# probe, aimed at this machine itself (127.0.0.1). It passes
+# `smokeping --check` in the lab, and one real round was run with it
+# (transcripts/t05-fping-debug-round.txt). That round shows exactly
+# what the sandbox does to it: fping cannot open an ICMP socket here,
+# so SmokePing records the attempt and logs the probe's complaint.
+# On any ordinary Linux machine the same config collects ping times.
+#
+# Paths point into the lab folder, and the Database step is 30
+# seconds instead of the usual 300 — see the comments in `config`.
+
+*** General ***
+
+owner    = SmokePing Lab
+contact  = lab@example.invalid
+mailhost = localhost
+sendmail = /bin/true
+imgcache = /home/hatch/workspace/smokeping-labwork/run/imgcache
+imgurl   = imgcache
+datadir  = /home/hatch/workspace/smokeping-labwork/run/data-fping
+piddir   = /home/hatch/workspace/smokeping-labwork/run/var-fping
+cgiurl   = http://localhost/cgi-bin/smokeping.cgi
+smokemail = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/smokemail
+tmail    = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/tmail
+
+*** Alerts ***
+
+to = alerts@example.invalid
+from = smokeping@example.invalid
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,>20%
+comment = No loss for three rounds, then more than a fifth of the pings lost
+edgetrigger = yes
+
+*** Database ***
+
+step     = 30
+pings    = 5
+
+# consfn xff steps rows
+
+AVERAGE  0.5   1   2000
+AVERAGE  0.5  12   2000
+    MIN  0.5  12   2000
+    MAX  0.5  12   2000
+
+*** Presentation ***
+
+template = /home/hatch/workspace/smokeping-labwork/root/etc/smokeping/basepage.html
+charset = utf-8
+
++ overview
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 360 Days"   360d
+
+*** Probes ***
+
++ FPing
+
+binary = /home/hatch/workspace/smokeping-labwork/root/usr/bin/fping
+
+*** Targets ***
+
+probe = FPing
+
+menu = Top
+title = Lab latency
+remark = The SmokePing lab: this machine pinging itself.
+
++ Local
+
+menu = Local
+title = Local targets
+
+++ Loopback
+
+menu = Loopback
+title = This machine itself, 127.0.0.1
+host = 127.0.0.1
+alerts = bigloss

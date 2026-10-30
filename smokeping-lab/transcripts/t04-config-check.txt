@@ -1,0 +1,12 @@
+$ smokeping --check --config=config.fping   (the FPing setup)
+Configuration file '/home/hatch/workspace/smokeping-for-mere-mortals/smokeping-lab/config.fping' syntax OK.
+exit=0
+
+$ smokeping --check --config=config   (the Curl setup that will run)
+Configuration file '/home/hatch/workspace/smokeping-for-mere-mortals/smokeping-lab/config' syntax OK.
+exit=0
+
+Both configurations parse: every section, both alert patterns
+(bigloss in each file, slowweb in the Curl one) and every path
+is accepted. --check validates alert patterns too — a mistyped
+pattern is a syntax error here, not a surprise at 3 a.m.

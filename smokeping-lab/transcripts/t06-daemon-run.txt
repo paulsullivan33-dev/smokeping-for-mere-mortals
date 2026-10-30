@@ -1,0 +1,21 @@
+$ python3 -m http.server 8080 --bind 127.0.0.1   (serving run/webroot, in the background)
+$ curl -s http://127.0.0.1:8080/ | head -3
+webserver pid 66360
+<!doctype html>
+<title>SmokePing lab page</title>
+<h1>SmokePing lab page</h1>
+
+$ smokeping --config=config --logfile=run/smokeping.log   (daemon mode)
+Daemonizing /home/hatch/workspace/smokeping-labwork/root/usr/sbin/smokeping ...
+exit=0
+$ cat run/var/smokeping.pid
+66367
+
+(the daemon then ran for about six minutes — eleven rounds at the
+30-second lab step — before being stopped with SIGTERM)
+
+$ cat run/smokeping.log
+Fri Oct 30 08:31:45 2026 - Smokeping version 2.008002 successfully launched.
+Fri Oct 30 08:31:45 2026 - Not entering multiprocess mode for just a single probe.
+Fri Oct 30 08:31:45 2026 - Curl: probing 1 targets with step 30 s and offset 19 s.
+Fri Oct 30 08:37:24 2026 - got TERM signal, terminating.

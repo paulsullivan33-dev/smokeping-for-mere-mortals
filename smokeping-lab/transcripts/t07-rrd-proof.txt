@@ -1,0 +1,56 @@
+$ rrdtool info run/data/Lab/LocalWeb.rrd   (structure, trimmed)
+step = 30
+ds[uptime].index = 0
+ds[uptime].type = "GAUGE"
+ds[uptime].minimal_heartbeat = 60
+ds[uptime].min = 0.0000000000e+00
+ds[uptime].max = NaN
+ds[uptime].last_ds = "U"
+ds[uptime].value = NaN
+ds[uptime].unknown_sec = 19
+ds[loss].index = 1
+ds[loss].type = "GAUGE"
+ds[loss].minimal_heartbeat = 60
+ds[loss].min = 0.0000000000e+00
+ds[loss].max = 5.0000000000e+00
+ds[loss].last_ds = "0"
+ds[loss].value = 0.0000000000e+00
+ds[loss].unknown_sec = 0
+ds[median].index = 2
+ds[median].type = "GAUGE"
+ds[median].minimal_heartbeat = 60
+ds[median].min = 0.0000000000e+00
+ds[median].max = NaN
+
+$ rrdtool lastupdate run/data/Lab/LocalWeb.rrd
+ uptime loss median ping1 ping2 ping3 ping4 ping5
+
+1793349439: U 0 0.002102 0.001097 0.001405 0.002102 0.002941 0.004508
+
+$ rrdtool fetch LocalWeb.rrd AVERAGE over the run   (median and loss columns)
+                         uptime                loss              median               ping1               ping2               ping3               ping4               ping5
+
+1793349060: -nan -nan -nan -nan -nan -nan -nan -nan
+1793349090: -nan -nan -nan -nan -nan -nan -nan -nan
+1793349120: -nan 0.0000000000e+00 8.3144375000e-03 2.6997500000e-03 4.5381250000e-03 8.3144375000e-03 9.2566250000e-03 1.1084375000e-02
+1793349150: -nan 0.0000000000e+00 5.2113666667e-03 2.2948000000e-03 2.6106000000e-03 5.2113666667e-03 6.2522333333e-03 6.6450666667e-03
+1793349180: -nan 0.0000000000e+00 4.6447333333e-03 2.3947333333e-03 2.8259000000e-03 4.6447333333e-03 6.4492333333e-03 6.9884333333e-03
+1793349210: -nan 0.0000000000e+00 2.8082000000e-03 1.8501000000e-03 2.5181000000e-03 2.8082000000e-03 3.8030333333e-03 4.9461666667e-03
+1793349240: -nan 0.0000000000e+00 4.4289666667e-03 1.7917666667e-03 2.2553333333e-03 4.4289666667e-03 4.9862666667e-03 6.5525333333e-03
+1793349270: -nan 0.0000000000e+00 6.9534666667e-03 2.4992333333e-03 3.1960333333e-03 6.9534666667e-03 7.5779000000e-03 9.3410333333e-03
+1793349300: -nan 0.0000000000e+00 1.1985666667e-03 1.1382000000e-03 1.1688333333e-03 1.1985666667e-03 1.5107333333e-03 3.3110333333e-03
+1793349330: -nan 0.0000000000e+00 1.1921333333e-03 1.0352000000e-03 1.1112666667e-03 1.1921333333e-03 1.2582333333e-03 2.1362666667e-03
+1793349360: -nan 0.0000000000e+00 1.3512000000e-03 9.5450000000e-04 1.0701666667e-03 1.3512000000e-03 1.5059666667e-03 1.9831333333e-03
+1793349390: -nan 0.0000000000e+00 1.3301333333e-03 8.8463333333e-04 9.9806666667e-04 1.3301333333e-03 1.6347666667e-03 2.0609333333e-03
+1793349420: -nan 0.0000000000e+00 1.3781000000e-03 9.3803333333e-04 1.0718666667e-03 1.3781000000e-03 1.9504666667e-03 2.5763333333e-03
+1793349450: -nan -nan -nan -nan -nan -nan -nan -nan
+1793349480: -nan -nan -nan -nan -nan -nan -nan -nan
+
+Reading it: eleven rounds hold real numbers, loss 0 throughout.
+The step-averaged median runs from 8.3 ms in the first round down
+to about 1.2–1.4 ms once things settled (fetch values are averages
+across each 30-second step, so they differ slightly from the raw
+lastupdate line above). The rows before the daemon started and
+after it stopped are -nan: no measurement, honestly empty. These
+are curl timings of real HTTP fetches from the lab web server —
+measured, not typed.
